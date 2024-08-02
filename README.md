@@ -35,6 +35,8 @@ Your company is developing a new e-commerce application consisting of several mi
 #### Task 1: Git Repository Setup
 
 1. **Create a Git repository** to store all project files, including Ansible playbooks,Dockerfiles, and Kubernetes manifests.
+![alt text](img/image1.png)
+
 2. **Branching Strategy:**
     - Create branches for development, testing, and production.
     - Implement a strategy for merging changes from development to testing and production.
