@@ -3,5 +3,13 @@
 <body>
     <h1>Hello from Nginx and Docker!</h1>
     <p>This is a simple static frontend served by Nginx.</p>
+    <div id="data">Hello from database</div>
+    <script>
+        fetch('http://localhost:4000/data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data').innerText = JSON.stringify(data);
+            });
+    </script>
 </body>
 </html>
