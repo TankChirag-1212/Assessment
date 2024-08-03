@@ -105,7 +105,7 @@ ENV POSTGRES_DB=mydatabase
     - Define Pods, Services, Deployments, and ReplicaSets.
     - Use ConfigMaps and Secrets for configuration management.
 
-> Kubernetes/frontend-deployment.yaml
+> [Kubernetes Frontend-Deployment](Kubernetes/frontend-deployment.yaml)
 
 ```yaml
 apiVersion: apps/v1
@@ -128,7 +128,7 @@ spec:
         ports:
         - containerPort: 80
 ```
-> Kubernetes/frontend-service.yaml
+> [Kubernetes Frontend-Service](Kubernetes/frontend-service.yaml)
 
 ```yaml
 apiVersion: v1
@@ -145,7 +145,7 @@ spec:
       nodePort: 30006
   type: NodePort
 ```
-> Kubernetes/backend-config.yaml
+> [Kubernetes Backend-Config](Kubernetes/backend-config.yaml)
 
 ```yaml
 apiVersion: v1
@@ -160,7 +160,7 @@ data:
   DATABASE_NAME: mydatabase
 ```
 
-> Kubernetes/backend-deployment.yaml
+> [Kubernetes Backend Deployment](Kubernetes/backend-deployment.yaml)
 
 ```yaml
 apiVersion: apps/v1
@@ -210,7 +210,7 @@ spec:
               key: DATABASE_NAME
 ```
 
-> Kubernetes/backend-service.yaml
+> [Kubernetes Backend Service](Kubernetes/backend-service.yaml)
 ```yaml
 apiVersion: v1
 kind: Service
@@ -226,7 +226,7 @@ spec:
   type: ClusterIP
 ```
 
-> Kubernetes/database-deployment.yaml
+> [Kubernetes Database Deployment](Kubernetes/database-deployment.yaml)
 
 ```yaml
 apiVersion: apps/v1
@@ -264,7 +264,7 @@ spec:
           claimName: postgresql-pvc
 ```
 
-> Kubernetes/database-service.yaml
+> [Kubernetes Database Service](Kubernetes/database-service.yaml)
 ```yaml
 apiVersion: v1
 kind: Service
@@ -280,7 +280,7 @@ spec:
   type: ClusterIP
 ```
 
-> Kubernetes/database-pvc.yaml
+> [Kubernetes Database PVC](Kubernetes/database-pvc.yaml)
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -323,10 +323,70 @@ spec:
 1. **Set up a Jenkins pipeline** using a Jenkinsfile.
     - Integrate with Git to trigger the pipeline on code changes.
     - Define stages for building Docker images, pushing them to the registry, deploying to Kubernetes, and running tests.
+> [Jenkins file](Jenkinsfile)
+```groovy
+pipeline {
+    environment {
+        imagename = "chirag1212/full-stack-app"
+        frontendDockerImage = ''
+        backendDockerImage = ''
+        dockerHubCredentials = '<docker hub credentials>'
+    }
+ 
+    agent any
+ 
+    stages {
+        stage('Fetching Github Repo') {
+            steps {
+                git([url: 'https://github.com/TankChirag-1212/Assessment.git', branch: 'development'])
+            }
+        }
+ 
+        stage('Building Frontend Image') {
+            steps {
+                script {
+                    dir('Docker/frontend') {
+                        frontendDockerImage = docker.build "${imagename}:frontend_v2"
+                    }
+                }
+            }
+        }
+         stage('Building backend image') {
+            steps {
+                script {
+                    dir('Docker/order-processing') {
+                        backendDockerImage = docker.build "${imagename}:backend"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy Image') {
+            steps {
+                script {
+                    // Use Jenkins credentials for Docker Hub login
+                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+ 
+                        // Push the image
+                        sh "docker push ${imagename}:frontend_v2"
+                        sh "docker push ${imagename}:backend"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 2. **Implement error handling** and notifications to alert the team on failures.
 3. **Deliverables:**
     - Jenkinsfile defining the CI/CD pipeline
     - Screenshots or logs demonstrating successful pipeline execution
+
+    ![alt text](img/image20.png)
+
+![alt text](img/image19.png)
 
 ------
 ### Evaluation Criteria
@@ -352,8 +412,11 @@ Participants will be evaluated based on the following:
 
 ### Submission
 - Participants should submit the following:
-- Git repository URL with all project files
-- Docker Hub repository links to the built images
-- Screenshots or logs of the Kubernetes deployment
-- Jenkins pipeline execution logs or screenshots
-- Detailed documentation explaining the setup and configurations
+    - Git repository URL with all project files
+        [Github Repository Link](https://github.com/TankChirag-1212/Assessment.git)
+
+    - Docker Hub repository links to the built images
+        [Docker Hub Link](https://hub.docker.com/repository/docker/chirag1212/full-stack-app/tags)
+    - Screenshots or logs of the Kubernetes deployment
+    - Jenkins pipeline execution logs or screenshots
+    - Detailed documentation explaining the setup and configurations [Documentation](README.md)
