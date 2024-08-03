@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello from Node.js and Docker!');
+    res.send('Hello from Backend');
 });
 
 app.get('/data', async (req, res) => {

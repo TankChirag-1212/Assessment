@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: chirag1212/full-stack-app:frontend_v3
+        image: chirag1212/full-stack-app:frontend_v2
         ports:
         - containerPort: 80
