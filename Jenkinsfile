@@ -20,7 +20,7 @@ pipeline {
         stage('Building Frontend Image') {
             steps {
                 script {
-                    dir('frontend') {
+                    dir('Docker/frontend') {
                         frontendDockerImage = docker.build "${imagename}:frontend_v2"
                     }
                 }
@@ -29,7 +29,7 @@ pipeline {
          stage('Building backend image') {
             steps {
                 script {
-                    dir('order-processing') {
+                    dir('Docker/order-processing') {
                         backendDockerImage = docker.build "${imagename}:backend"
                     }
                 }
