@@ -3,8 +3,8 @@ pipeline {
         imagename = "chirag1212/full-stack-app"
         frontendDockerImage = ''
         backendDockerImage = ''
-        dockerHubCredentials = 'd784ec34-84a6-4363-8d99-5ac8be4a8df8'	
-        kubernetes_server_private_ip="192.168.49.2"
+        dockerHubCredentials = '<docker-credentials>'	
+        kubernetes_server_private_ip="<minikube-ip>"
         ansible_server_private_ip="localhost"
     }
  

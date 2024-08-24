@@ -5,6 +5,6 @@ metadata:
 data:
   DATABASE_HOST: postgresql-service
   DATABASE_PORT: "5432"
-  DATABASE_USER: appUser
-  DATABASE_PASSWORD: user@123
+  DATABASE_USER: <db-username>
+  DATABASE_PASSWORD: <db-password>
   DATABASE_NAME: mydatabase
